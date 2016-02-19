@@ -65,6 +65,13 @@ var setLocation = function(latitude, longitude) {
     defaults.longitude = longitude;
 };
 
+/**
+ *  Accept a custom bunyan instance
+ */
+var setLogger = function(l) {
+    logger = l;
+};
+
 var unique_id = 0;
 
 /**
@@ -175,7 +182,7 @@ Timer.prototype._schedule = function(paramd) {
     var event = new DateTime(paramd);
 
     if ((event.compare() < 0) && !self._reschedule(event)) {
-        logger.error({
+        logger.debug({
             method: "_schedule",
             cause: "likely the programmer or data, often not serious",
             event: event.get(),
@@ -230,7 +237,7 @@ Timer.prototype._execute = function(event) {
     // dd.__unique_id = self.__unique_id;
     self.emit(dd.id ? dd.id : 'timer', dd);
 
-    logger.info({
+    logger.debug({
         method: "_execute",
         event: dd,
         unique_id: self.__unique_id,
@@ -274,7 +281,7 @@ Timer.prototype._scheduler = function() {
     self.events.sort(event_sorter);
 
     var delta = self.events[0].compare()
-    logger.info({
+    logger.debug({
         method: "_scheduler",
         next_run: delta,
         unique_id: self.__unique_id,
@@ -311,3 +318,4 @@ Timer.prototype._scheduler = function() {
 exports.Timer = Timer;
 exports.defaults = defaults;
 exports.setLocation = setLocation;
+exports.setLogger = setLogger;
