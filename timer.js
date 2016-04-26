@@ -175,14 +175,14 @@ Timer.prototype._schedule = function(paramd) {
     var event = new DateTime(paramd);
 
     if ((event.compare() < 0) && !self._reschedule(event)) {
-        logger.error({
+        logger.warn({
             method: "_schedule",
-            cause: "likely the programmer or data, often not serious",
+            cause: "usually not serious",
             event: event.get(),
             unique_id: self.__unique_id,
             initd: paramd.initd,
             driverd: paramd.driverd
-        }, "date is in the past any this does not repeat -- not scheduling");
+        }, "date is in the past and does not repeat -- not scheduling");
         return
     }
 

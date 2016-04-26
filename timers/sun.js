@@ -29,6 +29,8 @@ var timer = require('../timer');
 var DateTime = require("../datetime").DateTime;
 var suncalc = require('suncalc');
 
+var HEARTBEAT_ID = "recalculate-heartbeat";
+
 /**
  *  Fire an event every day
  */
@@ -52,12 +54,12 @@ Sun.prototype._setup = function(paramd) {
     // see https://github.com/dpjanes/iotdb-timers/issues/1
     // for possible improvements
     self._schedule({
-        id: "recalcuate-heartbeat",
+        id: HEARTBEAT_ID,
         hour: 0,
         day_repeat: 1
     })
 
-    self.on("recalculate", self._recalculate);
+    self.on(HEARTBEAT_ID, self._recalculate);
     self._recalculate();
 }
 
