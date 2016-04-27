@@ -26,6 +26,12 @@
 
 var _ = exports;
 
+var iotdb;
+try {
+    var iotdb = require('iotdb');
+} catch (x) {
+}
+
 var bunyan;
 try {
     var bunyan = require('bunyan');
@@ -118,10 +124,15 @@ exports.make_function = function(_cls, _number) {
 
         return timer;
     }
-}
+};
 
 exports.make_logger = function(d) {
-    if (bunyan) {
+    if (iotdb) {
+        return iotdb.logger({
+            name: 'iotdb-timer',
+            module: 'timer',
+        });
+    } else if (bunyan) {
         return bunyan.createLogger({
             name: 'iotdb-timer',
             module: 'timer',
@@ -142,6 +153,4 @@ exports.make_logger = function(d) {
             error: l,
         };
     }
-}
-
-
+};
