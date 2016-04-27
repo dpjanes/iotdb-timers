@@ -138,6 +138,7 @@ exports.make_logger = function(d) {
             debug: l,
             trace: l,
             info: l,
+            warn: l,
             error: l,
         };
     }
