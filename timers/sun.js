@@ -58,6 +58,7 @@ Sun.prototype._setup = function(paramd) {
         hour: 0,
         day_repeat: 1
     })
+    // console.log("SCHEDULE HEARTBEAT")
 
     self.on(HEARTBEAT_ID, self._recalculate);
     self._recalculate();
@@ -66,7 +67,9 @@ Sun.prototype._setup = function(paramd) {
 Sun.prototype._recalculate = function() {
     var self = this;
 
-    var td = suncalc.getTimes(new Date(), self.paramd.latitude, self.paramd.longitude);
+    var dt_now = new Date();
+    var dt_noon = new Date(dt_now.getFullYear(), dt_now.getMonth(), dt_now.getDate(), 12, 0, 0, 0, 0);
+    var td = suncalc.getTimes(dt_noon, self.paramd.latitude, self.paramd.longitude);
     var dt_when = td[self.paramd.what];
 
     self.when = new DateTime(dt_when);
