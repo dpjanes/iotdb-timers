@@ -28,14 +28,14 @@
 var _ = require("./helpers.js");
 var moment = require("moment");
 
-var format2 = function(d) {
-    d = Math.abs(d) % 100
+var format2 = function (d) {
+    d = Math.abs(d) % 100;
     if (d < 10) {
-        return "0" + d
+        return "0" + d;
     } else {
-        return "" + d
+        return "" + d;
     }
-}
+};
 
 var DateTime = function (paramd) {
     var self = this;
@@ -53,19 +53,19 @@ var DateTime = function (paramd) {
 
     // if any element is set, we reset smaller time elements
     if ((paramd.year !== undefined) && (paramd.month === undefined)) {
-        paramd.month = 1
+        paramd.month = 1;
     }
-    if ((paramd.month!== undefined)  && (paramd.day === undefined)) {
-        paramd.day = 1
+    if ((paramd.month !== undefined) && (paramd.day === undefined)) {
+        paramd.day = 1;
     }
     if ((paramd.day !== undefined) && (paramd.hour === undefined)) {
-        paramd.hour = 0
+        paramd.hour = 0;
     }
     if ((paramd.hour !== undefined) && (paramd.minute === undefined)) {
-        paramd.minute = 0
+        paramd.minute = 0;
     }
     if ((paramd.minute !== undefined) && (paramd.second === undefined)) {
-        paramd.second = 0
+        paramd.second = 0;
     }
 
     // default everything else to whatever was given
@@ -82,29 +82,27 @@ var DateTime = function (paramd) {
         hour_delta: 0
     });
 
-    self._dd = {}
+    self._dd = {};
     self.set(paramd);
 };
 
 DateTime.prototype._isDateTime = true;
 
-DateTime.prototype.set = function(paramd) {
+DateTime.prototype.set = function (paramd) {
     var self = this;
 
-    if (paramd === undefined) {
-    } else if (_.is.String(paramd)) {
+    if (paramd === undefined) {} else if (_.is.String(paramd)) {
         paramd = (new DateTime(paramd)).get();
     } else if (_.is.Date(paramd)) {
         paramd = (new DateTime(paramd)).get();
     } else if (paramd._isDateTime) {
         paramd = paramd.get();
-    } else if (_.is.Object(paramd)) {
-    } else {
-        throw new Error("unrecognized argument", paramd)
+    } else if (_.is.Object(paramd)) {} else {
+        throw new Error("unrecognized argument", paramd);
     }
 
     // update with whatever is set
-    paramd = _.defaults(paramd, self._dd)
+    paramd = _.defaults(paramd, self._dd);
 
     var whens = [
         "" + paramd.year,
@@ -132,23 +130,23 @@ DateTime.prototype.set = function(paramd) {
     }
 
     paramd.epoch = dt_when.getTime() / 1000.0;
-    paramd.isoweekday = ( dt_when.getDay() + 6 ) % 7 + 1;
+    paramd.isoweekday = (dt_when.getDay() + 6) % 7 + 1;
     paramd.isodatetime = dt_when.toISOString();
 
     self._dd = paramd;
-}
+};
 
-DateTime.prototype.get = function() {
+DateTime.prototype.get = function () {
     var self = this;
     return _.clone(self._dd);
-}
+};
 
-DateTime.prototype.getDate = function() {
+DateTime.prototype.getDate = function () {
     var self = this;
     return new Date(self._dd.epoch * 1000.0);
-}
+};
 
-DateTime.prototype.compare = function(paramd) {
+DateTime.prototype.compare = function (paramd) {
     var self = this;
     var ms_compare;
 
@@ -161,10 +159,10 @@ DateTime.prototype.compare = function(paramd) {
     } else if (_.is.Object(paramd)) {
         ms_compare = (new DateTime(paramd)).epoch;
     } else {
-        throw new Error("unrecognized argument", paramd)
+        throw new Error("unrecognized argument", paramd);
     }
 
     return self._dd.epoch - ms_compare;
-}
+};
 
 exports.DateTime = DateTime;

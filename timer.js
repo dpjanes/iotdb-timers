@@ -36,31 +36,31 @@ var logger = _.make_logger({
     module: 'timer',
 });
 
-var event_sorter = function(a, b) {
+var event_sorter = function (a, b) {
     return a.compare(b);
-}
+};
 
-var format2 = function(d) {
-    d = Math.abs(d) % 100
+var format2 = function (d) {
+    d = Math.abs(d) % 100;
     if (d < 10) {
-        return "0" + d
+        return "0" + d;
     } else {
-        return "" + d
+        return "" + d;
     }
-}
+};
 
 /**
  *  Internal for package ... mainly
  */
 var defaults = {
-    latitude: 43.7, 
+    latitude: 43.7,
     longitude: -79.4,
     max_delta: 60,
 };
 
 /**
  */
-var setLocation = function(latitude, longitude) {
+var setLocation = function (latitude, longitude) {
     defaults.latitude = latitude;
     defaults.longitude = longitude;
 };
@@ -68,7 +68,7 @@ var setLocation = function(latitude, longitude) {
 /**
  *  Accept a custom bunyan instance
  */
-var setLogger = function(l) {
+var setLogger = function (l) {
     logger = l;
 };
 
@@ -85,7 +85,7 @@ var Timer = function () {
     self.__unique_id = unique_id++;
 
     // console.log("EVENTS", self._events);
-    self._events = undefined
+    self._events = undefined;
     events.EventEmitter.call(this);
     self._events.__unique_id = self.__unique_id;
 };
@@ -94,11 +94,11 @@ util.inherits(Timer, events.EventEmitter);
 
 /**
  */
-Timer.prototype.schedule = function(event) {
+Timer.prototype.schedule = function (event) {
     this._schedule(event);
-}
+};
 
-Timer.prototype.getWhen = function() {
+Timer.prototype.getWhen = function () {
     var self = this;
 
     if (!self.when) {
@@ -106,9 +106,9 @@ Timer.prototype.getWhen = function() {
     }
 
     return self._scrub(self.when);
-}
+};
 
-Timer.prototype.getDate = function() {
+Timer.prototype.getDate = function () {
     var self = this;
 
     if (!self.when) {
@@ -116,9 +116,9 @@ Timer.prototype.getDate = function() {
     }
 
     return self.when.getDate();
-}
+};
 
-Timer.prototype.isBefore = function() {
+Timer.prototype.isBefore = function () {
     var self = this;
 
     if (!self.when) {
@@ -126,9 +126,9 @@ Timer.prototype.isBefore = function() {
     }
 
     return self.when.compare() > 0;
-}
+};
 
-Timer.prototype.isAfter = function() {
+Timer.prototype.isAfter = function () {
     var self = this;
 
     if (!self.when) {
@@ -136,17 +136,17 @@ Timer.prototype.isAfter = function() {
     }
 
     return self.when.compare() <= 0;
-}
+};
 
 
 /**
  *  Reschedule the event to the next interval. If
  *  not rescheduable, return false
  */
-Timer.prototype._reschedule = function(event) {
+Timer.prototype._reschedule = function (event) {
     var self = this;
 
-    var dd = event.get()
+    var dd = event.get();
     var dt_old = event.getDate();
     var dt_new = null;
 
@@ -176,7 +176,7 @@ Timer.prototype._reschedule = function(event) {
  *  <p>
  *  Lots of rules built into the code need to be documented
  */
-Timer.prototype._schedule = function(paramd) {
+Timer.prototype._schedule = function (paramd) {
     var self = this;
 
     var event = new DateTime(paramd);
@@ -190,7 +190,7 @@ Timer.prototype._schedule = function(paramd) {
             initd: paramd.initd,
             driverd: paramd.driverd
         }, "date is in the past and does not repeat -- not scheduling");
-        return
+        return;
     }
 
     if (paramd.id) {
@@ -214,8 +214,8 @@ Timer.prototype._schedule = function(paramd) {
 
 /**
  */
-Timer.prototype._scrub = function(event) {
-    var dd = event.get()
+Timer.prototype._scrub = function (event) {
+    var dd = event.get();
 
     for (var key in dd) {
         if (key.indexOf('_') > -1) {
@@ -224,12 +224,12 @@ Timer.prototype._scrub = function(event) {
     }
 
     return dd;
-}
+};
 
 /**
  *  Run the event
  */
-Timer.prototype._execute = function(event) {
+Timer.prototype._execute = function (event) {
     var self = this;
 
     var dd = self._scrub(event);
@@ -241,14 +241,14 @@ Timer.prototype._execute = function(event) {
         method: "_execute",
         event: dd,
         unique_id: self.__unique_id,
-    }, "timer change")
+    }, "timer change");
 };
 
 /**
  *  This will run any events that are ready AND
  *  it will set the timer to wakeup at the next event
  */
-Timer.prototype._scheduler = function() {
+Timer.prototype._scheduler = function () {
     var self = this;
 
     if (self.timer_id) {
@@ -262,7 +262,7 @@ Timer.prototype._scheduler = function() {
     self.events.sort(event_sorter);
 
     while (true) {
-        var event = self.events[0]
+        var event = self.events[0];
         if (event.compare() > 0) {
             break;
         }
@@ -280,7 +280,7 @@ Timer.prototype._scheduler = function() {
 
     self.events.sort(event_sorter);
 
-    var delta = self.events[0].compare()
+    var delta = self.events[0].compare();
     logger.debug({
         method: "_scheduler",
         next_run: delta,
@@ -299,12 +299,12 @@ Timer.prototype._scheduler = function() {
         self._timer_id = null;
     }
 
-    var again = function() {
-        var delta = self.events[0].compare()
+    var again = function () {
+        var delta = self.events[0].compare();
         if (delta > defaults.max_delta) {
             self._timer_id = setTimeout(again, defaults.max_delta * 1000);
         } else {
-            self._timer_id = setTimeout(function() {
+            self._timer_id = setTimeout(function () {
                 self._scheduler();
             }, delta * 1000);
         }

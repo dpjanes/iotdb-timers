@@ -24,7 +24,7 @@
 
 "use strict";
 
-var _copy = function(module) {
+var _copy = function (module) {
     for (var name in module) {
         exports[name] = module[name];
     }

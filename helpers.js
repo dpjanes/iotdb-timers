@@ -29,56 +29,58 @@ var _ = exports;
 var iotdb;
 try {
     var iotdb = require('iotdb');
-} catch (x) {
-}
+} catch (x) {}
 
 var bunyan;
 try {
     var bunyan = require('bunyan');
-} catch (x) {
-}
+} catch (x) {}
 
-exports.isString = function(o) {
+exports.isString = function (o) {
     return typeof o === 'string';
 };
 
-exports.isDate = function(o) {
+exports.isDate = function (o) {
     return o instanceof Date;
 };
 
-exports.isDateTime = function(o) {
+exports.isDateTime = function (o) {
     return o && o._isDateTime;
 };
 
-exports.isObject = function(o) {
+exports.isObject = function (o) {
     return typeof o === 'object';
 };
 
-exports.isFunction = function(o) {
+exports.isFunction = function (o) {
     return typeof o === 'function';
 };
 
-exports.isArray = function(o) {
+exports.isArray = function (o) {
     return Array.isArray(o);
 };
 
-exports.isNumber = function(o) {
+exports.isNumber = function (o) {
     return typeof o === 'number';
 };
 
 exports.is = {
-	Date: exports.isDate,
-	Function: exports.isFunction,
-	Number: exports.isNumber,
-	Object: exports.isObject,
-	String: exports.isString,
+    Date: exports.isDate,
+    Function: exports.isFunction,
+    Number: exports.isNumber,
+    Object: exports.isObject,
+    String: exports.isString,
 };
 
-exports.clone = function(o) {
-    if (!exports.isObject(o)) return o;
-    if (exports.isArray(o)) return o.slice();
+exports.clone = function (o) {
+    if (!exports.isObject(o)) {
+        return o;
+    }
+    if (exports.isArray(o)) {
+        return o.slice();
+    }
 
-    var n = {}
+    var n = {};
     for (var key in o) {
         n[key] = o[key];
     }
@@ -86,15 +88,15 @@ exports.clone = function(o) {
     return n;
 };
 
-exports.defaults = function(paramd, defaultd) {
+exports.defaults = function (paramd, defaultd) {
     if (!paramd) {
-        paramd = {}
+        paramd = {};
     }
 
     for (var key in defaultd) {
-        var pvalue = paramd[key]
+        var pvalue = paramd[key];
         if (pvalue === undefined) {
-            paramd[key] = defaultd[key]
+            paramd[key] = defaultd[key];
         }
     }
 
@@ -104,13 +106,13 @@ exports.defaults = function(paramd, defaultd) {
 /**
  *  Used by timers to turn classes into functions
  */
-exports.make_function = function(_cls, _number) {
-    return function(paramd, callback) {
+exports.make_function = function (_cls, _number) {
+    return function (paramd, callback) {
         if (_.is.Function(paramd)) {
             callback = paramd;
             paramd = {};
         } else if (_.is.Number(paramd)) {
-            var d = {}
+            var d = {};
             d[_number] = paramd;
 
             paramd = d;
@@ -123,10 +125,10 @@ exports.make_function = function(_cls, _number) {
         }
 
         return timer;
-    }
+    };
 };
 
-exports.make_logger = function(d) {
+exports.make_logger = function (d) {
     if (iotdb) {
         return iotdb.logger({
             name: 'iotdb-timer',
@@ -138,7 +140,7 @@ exports.make_logger = function(d) {
             module: 'timer',
         });
     } else {
-        var l = function() {
+        var l = function () {
             console.log("--");
             for (var ai in arguments) {
                 console.log(JSON.stringify(arguments[ai], null, 2).replace(/^/gm, '  '));
