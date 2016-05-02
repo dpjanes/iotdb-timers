@@ -64,12 +64,18 @@ exports.isNumber = function (o) {
     return typeof o === 'number';
 };
 
+exports.isInteger = function (o) {
+    return typeof o === 'number' && ((o % 1) === 0);
+};
+
 exports.is = {
     Date: exports.isDate,
     Function: exports.isFunction,
     Number: exports.isNumber,
+    Integer: exports.isInteger,
     Object: exports.isObject,
     String: exports.isString,
+    Array: exports.isArray,
 };
 
 exports.clone = function (o) {

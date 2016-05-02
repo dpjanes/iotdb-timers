@@ -55,6 +55,16 @@ const DateTime = function (paramd) {
     } else if (_.is.String(paramd)) {
         dt_now = new Date(paramd);
         paramd = {};
+    } else if (paramd === undefined) {
+        // ok
+    } else if (paramd._isDateTime) {
+        throw new Error("DateTime does not accept DateTime as argument");
+    } else if (_.is.Array(paramd)) {
+        throw new Error("DateTime does not accept Array as argument");
+    } else if (_.is.Object(paramd)) {
+        // ok
+    } else {
+        throw new Error("unknown argument");
     }
 
     paramd = _.defaults(paramd, {});
@@ -111,6 +121,20 @@ DateTime.prototype.set = function (paramd) {
 
     // update with whatever is set
     paramd = _.defaults(paramd, self._dd);
+
+    if (!_.is.Integer(paramd.year)) {
+        throw new Error("expected year to be an Integer");
+    } else if (!_.is.Integer(paramd.month)) {
+        throw new Error("expected month to be an Integer");
+    } else if (!_.is.Integer(paramd.day)) {
+        throw new Error("expected day to be an Integer");
+    } else if (!_.is.Integer(paramd.hour)) {
+        throw new Error("expected hour to be an Integer");
+    } else if (!_.is.Integer(paramd.minute)) {
+        throw new Error("expected minute to be an Integer");
+    } else if (!_.is.Integer(paramd.second)) {
+        throw new Error("expected second to be an Integer");
+    }
 
     var whens = [
         "" + paramd.year,
