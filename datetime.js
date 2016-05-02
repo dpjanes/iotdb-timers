@@ -25,10 +25,10 @@
  *  limitations under the License.
  */
 
-var _ = require("./helpers.js");
-var moment = require("moment");
+const _ = require("./helpers.js");
+const moment = require("moment");
 
-var format2 = function (d) {
+const format2 = function (d) {
     d = Math.abs(d) % 100;
     if (d < 10) {
         return "0" + d;
@@ -37,10 +37,18 @@ var format2 = function (d) {
     }
 };
 
-var DateTime = function (paramd) {
-    var self = this;
+const make_now = function() {
+    if (exports._dt_now) {
+        return exports._dt_now;
+    } else {
+        return new Date();
+    }
+};
 
-    var dt_now = new Date();
+const DateTime = function (paramd) {
+    const self = this;
+
+    var dt_now = make_now();
     if (_.is.Date(paramd)) {
         dt_now = paramd;
         paramd = {};
@@ -89,7 +97,7 @@ var DateTime = function (paramd) {
 DateTime.prototype._isDateTime = true;
 
 DateTime.prototype.set = function (paramd) {
-    var self = this;
+    const self = this;
 
     if (paramd === undefined) {} else if (_.is.String(paramd)) {
         paramd = (new DateTime(paramd)).get();
@@ -137,21 +145,21 @@ DateTime.prototype.set = function (paramd) {
 };
 
 DateTime.prototype.get = function () {
-    var self = this;
+    const self = this;
     return _.clone(self._dd);
 };
 
 DateTime.prototype.getDate = function () {
-    var self = this;
+    const self = this;
     return new Date(self._dd.epoch * 1000.0);
 };
 
 DateTime.prototype.compare = function (paramd) {
-    var self = this;
+    const self = this;
     var ms_compare;
 
     if (paramd === undefined) {
-        ms_compare = (new Date()).getTime() / 1000;
+        ms_compare = (make_now()).getTime() / 1000;
     } else if (_.is.String(paramd)) {
         ms_compare = (new DateTime(paramd)).epoch;
     } else if (paramd._isDateTime) {
@@ -165,4 +173,8 @@ DateTime.prototype.compare = function (paramd) {
     return self._dd.epoch - ms_compare;
 };
 
+/**
+ *  API
+ */
 exports.DateTime = DateTime;
+exports._dt_now = null;
