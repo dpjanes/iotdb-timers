@@ -28,7 +28,7 @@ describe('datetime', function() {
     });
 
     describe('constructor', function() {
-        describe('good', function() {
+        describe('expect the reference', function() {
             it('no argument - should be reference', function() {
                 dt = new datetime.DateTime();
 
@@ -57,6 +57,8 @@ describe('datetime', function() {
                 assert.strictEqual(dt._dd.isodatetime, reference0_isodatetime);
                 assert.strictEqual(dt._dd.epoch, reference0_epoch);
             });
+        });
+        describe('expect change', function() {
             it('dictionary.year argument - should be year with everything reset', function() {
                 dt = new datetime.DateTime({
                     year: 2015,
