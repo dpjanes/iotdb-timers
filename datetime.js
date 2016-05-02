@@ -58,7 +58,7 @@ const DateTime = function (paramd) {
     } else if (paramd === undefined) {
         // ok
     } else if (paramd._isDateTime) {
-        throw new Error("DateTime does not accept DateTime as argument");
+        paramd = _.clone(paramd._dd);
     } else if (_.is.Array(paramd)) {
         throw new Error("DateTime does not accept Array as argument");
     } else if (_.is.Object(paramd)) {

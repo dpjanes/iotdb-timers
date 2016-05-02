@@ -57,6 +57,13 @@ describe('datetime', function() {
                 assert.strictEqual(dt._dd.isodatetime, reference0_isodatetime);
                 assert.strictEqual(dt._dd.epoch, reference0_epoch);
             });
+            it('reference DateTime argument - should be reference', function() {
+                dt = new datetime.DateTime(new datetime.DateTime());
+
+                assert.strictEqual(dt._dd.year, 2013);
+                assert.strictEqual(dt._dd.isodatetime, reference0_isodatetime);
+                assert.strictEqual(dt._dd.epoch, reference0_epoch);
+            });
         });
         describe('expect change', function() {
             it('dictionary.year argument - should be year with everything reset', function() {
@@ -95,6 +102,13 @@ describe('datetime', function() {
                 assert.strictEqual(dt._dd.minute, 0);
                 assert.strictEqual(dt._dd.second, 0);
             });
+            it('other DateTime argument - should be reference', function() {
+                dt = new datetime.DateTime(new datetime.DateTime(reference1_date));
+
+                assert.strictEqual(dt._dd.year, 2015);
+                assert.strictEqual(dt._dd.isodatetime, reference1_isodatetime);
+                assert.strictEqual(dt._dd.epoch, reference1_epoch);
+            });
         });
         describe('exceptions', function() {
             it('number argument', function() {
@@ -105,11 +119,6 @@ describe('datetime', function() {
             it('list argument', function() {
                 assert.throws(function() {
                     dt = new datetime.DateTime([ 2015, 1, 1 ]);
-                }, Error);
-            });
-            it('DateTime argument', function() {
-                assert.throws(function() {
-                    dt = new datetime.DateTime(new datetime.DateTime());
                 }, Error);
             });
             it('bad year', function() {
