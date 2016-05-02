@@ -123,8 +123,6 @@ DateTime.prototype.set = function(paramd) {
         format2(Math.abs(paramd.tz) % 60)
     ];
 
-
-
     var when$ = whens.join("");
     var dt_when = new Date(when$);
 
