@@ -213,6 +213,9 @@ Timer.prototype._schedule = function (paramd) {
 };
 
 /**
+ *  This just removes information we don't want
+ *  to leak into public when we're sharing the
+ *  internal data of an event.
  */
 Timer.prototype._scrub = function (event) {
     var dd = event.get();
@@ -251,8 +254,9 @@ Timer.prototype._execute = function (event) {
 Timer.prototype._scheduler = function () {
     var self = this;
 
-    if (self.timer_id) {
-        clearTimeout(self.timer_id);
+    console.log("_scheduler", self._timer_id);
+    if (self._timer_id) {
+        clearTimeout(self._timer_id);
     }
 
     if (self.events.length === 0) {

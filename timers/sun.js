@@ -56,7 +56,7 @@ Sun.prototype._setup = function(paramd) {
     self._schedule({
         id: HEARTBEAT_ID,
         hour: 0,
-        day_repeat: 1
+        hour_repeat: 1
     })
     // console.log("SCHEDULE HEARTBEAT")
 
@@ -69,14 +69,23 @@ Sun.prototype._recalculate = function() {
 
     var dt_now = new Date();
     var dt_noon = new Date(dt_now.getFullYear(), dt_now.getMonth(), dt_now.getDate(), 12, 0, 0, 0, 0);
+    // process.exit();
+    var dt_noon = new Date(2016, 4, 3, 5, 20, 0, 0);
     var td = suncalc.getTimes(dt_noon, self.paramd.latitude, self.paramd.longitude);
+    console.log("-");
+    console.log("NOW", dt_now);
+    // console.log("NOON", dt_noon);
+    console.log("HERE", self.paramd.latitude, self.paramd.longitude, td);
     var dt_when = td[self.paramd.what];
 
     self.when = new DateTime(dt_when);
     self.when.id = "timer";
 
-    self._schedule(self.when)
-}
+    // to avoid the same event being rescheduled over and over
+    setTimeout(function() {
+        self._schedule(self.when);
+    }, 1000);
+};
 
 /* make all the functions */
 var _make = function(name_what, name_class, name_function) {
@@ -93,7 +102,7 @@ var _make = function(name_what, name_class, name_function) {
 
     exports[name_class].prototype = new Sun();
     exports[name_function] = _.make_function(exports[name_class], "delta");
-}
+};
 
 var whatss = [
 	[ "solarNoon", "SolarNoon", "solar_noon" ],

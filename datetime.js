@@ -153,6 +153,18 @@ DateTime.prototype.set = function (paramd) {
         format2(Math.abs(paramd.tz) % 60)
     ];
 
+    /*
+    console.log("= WHENS = ");
+    console.log(" year", paramd.year);
+    console.log(" month", paramd.month);
+    console.log(" day", paramd.day);
+    console.log(" hour", paramd.hour);
+    console.log(" minute", paramd.minute);
+    console.log(" second", paramd.second);
+    console.log(" tz", paramd.tz);
+    console.log("=");
+     */
+
     var when$ = whens.join("");
     var dt_when = new Date(when$);
 
