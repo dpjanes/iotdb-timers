@@ -56,7 +56,7 @@ Sun.prototype._setup = function (paramd) {
     self._schedule({
         id: HEARTBEAT_ID,
         hour: 0,
-        minute_repeat: 1
+        day_repeat: 1
     });
     // console.log("SCHEDULE HEARTBEAT")
 
