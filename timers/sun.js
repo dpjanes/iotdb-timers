@@ -61,10 +61,14 @@ Sun.prototype._setup = function(paramd) {
     // console.log("SCHEDULE HEARTBEAT")
 
     self.on(HEARTBEAT_ID, self._recalculate);
-    self._recalculate();
+    self._do_recalculate();
 }
 
-Sun.prototype._recalculate = function() {
+/**
+ *  Directly recalculates the next event. This is called
+ *  with a delay usually to avoid freakouts
+ */
+Sun.prototype._do_recalculate = function() {
     var self = this;
 
     var dt_now = new Date();
@@ -81,9 +85,18 @@ Sun.prototype._recalculate = function() {
     self.when = new DateTime(dt_when);
     self.when.id = "timer";
 
-    // to avoid the same event being rescheduled over and over
-    setTimeout(function() {
-        self._schedule(self.when);
+    self._schedule(self.when);
+};
+
+/**
+ *  Add a delay to avoid the same solar event being rescheduled
+ *  causing stack crashes
+ */
+Sun.prototype._recalculate = function() {
+    var self = this;
+
+    setTimout(function() {
+        self._do_recalculate();
     }, 1000);
 };
 
