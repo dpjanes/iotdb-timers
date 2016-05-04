@@ -254,7 +254,7 @@ Timer.prototype._execute = function (event) {
 Timer.prototype._scheduler = function () {
     var self = this;
 
-    console.log("_scheduler", self._timer_id);
+    // console.log("_scheduler", self._timer_id); 
     if (self._timer_id) {
         clearTimeout(self._timer_id);
     }

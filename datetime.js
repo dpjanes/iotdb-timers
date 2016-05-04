@@ -37,7 +37,7 @@ const format2 = function (d) {
     }
 };
 
-const make_now = function() {
+const make_now = function () {
     if (exports._dt_now) {
         return exports._dt_now;
     } else {

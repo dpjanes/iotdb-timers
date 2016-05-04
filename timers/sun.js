@@ -40,7 +40,7 @@ var Sun = function (paramd) {
 
 Sun.prototype = new timer.Timer();
 
-Sun.prototype._setup = function(paramd) {
+Sun.prototype._setup = function (paramd) {
     var self = this;
 
     self.paramd = _.defaults(paramd, {});
@@ -56,30 +56,30 @@ Sun.prototype._setup = function(paramd) {
     self._schedule({
         id: HEARTBEAT_ID,
         hour: 0,
-        hour_repeat: 1
-    })
+        minute_repeat: 1
+    });
     // console.log("SCHEDULE HEARTBEAT")
 
     self.on(HEARTBEAT_ID, self._recalculate);
     self._do_recalculate();
-}
+};
 
 /**
  *  Directly recalculates the next event. This is called
  *  with a delay usually to avoid freakouts
  */
-Sun.prototype._do_recalculate = function() {
+Sun.prototype._do_recalculate = function () {
     var self = this;
 
     var dt_now = new Date();
     var dt_noon = new Date(dt_now.getFullYear(), dt_now.getMonth(), dt_now.getDate(), 12, 0, 0, 0, 0);
-    // process.exit();
-    var dt_noon = new Date(2016, 4, 3, 5, 20, 0, 0);
     var td = suncalc.getTimes(dt_noon, self.paramd.latitude, self.paramd.longitude);
+    /*
     console.log("-");
     console.log("NOW", dt_now);
     // console.log("NOON", dt_noon);
     console.log("HERE", self.paramd.latitude, self.paramd.longitude, td);
+    */
     var dt_when = td[self.paramd.what];
 
     self.when = new DateTime(dt_when);
@@ -92,17 +92,17 @@ Sun.prototype._do_recalculate = function() {
  *  Add a delay to avoid the same solar event being rescheduled
  *  causing stack crashes
  */
-Sun.prototype._recalculate = function() {
+Sun.prototype._recalculate = function () {
     var self = this;
 
-    setTimout(function() {
+    setTimeout(function () {
         self._do_recalculate();
     }, 1000);
 };
 
 /* make all the functions */
-var _make = function(name_what, name_class, name_function) {
-    exports[name_class] = function(paramd) {
+var _make = function (name_what, name_class, name_function) {
+    exports[name_class] = function (paramd) {
         Sun.call(this);
         var self = this;
 
@@ -111,27 +111,27 @@ var _make = function(name_what, name_class, name_function) {
         });
 
         self._setup(paramd);
-    }
+    };
 
     exports[name_class].prototype = new Sun();
     exports[name_function] = _.make_function(exports[name_class], "delta");
 };
 
 var whatss = [
-	[ "solarNoon", "SolarNoon", "solar_noon" ],
-	[ "nadir", "Nadir", "nadir" ],
-	[ "sunrise", "Sunrise", "sunrise" ],
-	[ "sunset", "Sunset", "sunset" ],
-	[ "sunriseEnd", "SunriseEnd", "sunrise_end" ],
-	[ "sunsetStart", "SunsetStart", "sunset_start" ],
-	[ "dawn", "Dawn", "dawn" ],
-	[ "dusk", "Dusk", "dusk" ],
-	[ "nauticalDawn", "NauticalDawn", "nautical_dawn" ],
-	[ "nauticalDusk", "NauticalDusk", "nautical_dusk" ],
-	[ "nightEnd", "NightEnd", "night_end" ],
-	[ "night", "Night", "night" ],
-	[ "goldenHourEnd", "GoldenHourEnd", "golden_hour_end" ],
-	[ "goldenHour", "GoldenHour", "golden_hour" ],
+    ["solarNoon", "SolarNoon", "solar_noon"],
+    ["nadir", "Nadir", "nadir"],
+    ["sunrise", "Sunrise", "sunrise"],
+    ["sunset", "Sunset", "sunset"],
+    ["sunriseEnd", "SunriseEnd", "sunrise_end"],
+    ["sunsetStart", "SunsetStart", "sunset_start"],
+    ["dawn", "Dawn", "dawn"],
+    ["dusk", "Dusk", "dusk"],
+    ["nauticalDawn", "NauticalDawn", "nautical_dawn"],
+    ["nauticalDusk", "NauticalDusk", "nautical_dusk"],
+    ["nightEnd", "NightEnd", "night_end"],
+    ["night", "Night", "night"],
+    ["goldenHourEnd", "GoldenHourEnd", "golden_hour_end"],
+    ["goldenHour", "GoldenHour", "golden_hour"],
 ];
 
 for (var wi in whatss) {
